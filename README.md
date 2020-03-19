@@ -1,2 +1,3 @@
-# testswiftsdk
-test swift SDK
+# cloud-sdk-swift
+
+A description of this package.
