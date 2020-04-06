@@ -33,56 +33,18 @@ import Foundation
 
 public struct LineFormat: Codable {
 
-    public enum Alignment: String, Codable, CaseIterable { 
+    public enum Alignment: String, Codable { 
         case center = "Center"
         case inset = "Inset"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Alignment.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Alignment.allCases.count {
-                self = Alignment.allCases[intValue]
-                return
-            }
-            self = Alignment.allCases[0]
-        }
     }
-    public enum CapStyle: String, Codable, CaseIterable { 
+    public enum CapStyle: String, Codable { 
         case round = "Round"
         case square = "Square"
         case flat = "Flat"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CapStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CapStyle.allCases.count {
-                self = CapStyle.allCases[intValue]
-                return
-            }
-            self = CapStyle.allCases[0]
-        }
     }
-    public enum DashStyle: String, Codable, CaseIterable { 
+    public enum DashStyle: String, Codable { 
         case solid = "Solid"
         case dot = "Dot"
         case dash = "Dash"
@@ -96,77 +58,20 @@ public struct LineFormat: Codable {
         case systemDashDotDot = "SystemDashDotDot"
         case custom = "Custom"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = DashStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < DashStyle.allCases.count {
-                self = DashStyle.allCases[intValue]
-                return
-            }
-            self = DashStyle.allCases[0]
-        }
     }
-    public enum JoinStyle: String, Codable, CaseIterable { 
+    public enum JoinStyle: String, Codable { 
         case round = "Round"
         case bevel = "Bevel"
         case miter = "Miter"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = JoinStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < JoinStyle.allCases.count {
-                self = JoinStyle.allCases[intValue]
-                return
-            }
-            self = JoinStyle.allCases[0]
-        }
     }
-    public enum Style: String, Codable, CaseIterable { 
+    public enum Style: String, Codable { 
         case single = "Single"
         case thinThin = "ThinThin"
         case thinThick = "ThinThick"
         case thickThin = "ThickThin"
         case thickBetweenThin = "ThickBetweenThin"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Style.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Style.allCases.count {
-                self = Style.allCases[intValue]
-                return
-            }
-            self = Style.allCases[0]
-        }
     }
     /** Alignment. */
     public var alignment: Alignment?

@@ -33,55 +33,17 @@ import Foundation
 
 public struct Portion: Codable {
 
-    public enum FontBold: String, Codable, CaseIterable { 
+    public enum FontBold: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = FontBold.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < FontBold.allCases.count {
-                self = FontBold.allCases[intValue]
-                return
-            }
-            self = FontBold.allCases[0]
-        }
     }
-    public enum FontItalic: String, Codable, CaseIterable { 
+    public enum FontItalic: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = FontItalic.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < FontItalic.allCases.count {
-                self = FontItalic.allCases[intValue]
-                return
-            }
-            self = FontItalic.allCases[0]
-        }
     }
-    public enum FontUnderline: String, Codable, CaseIterable { 
+    public enum FontUnderline: String, Codable { 
         case _none = "None"
         case words = "Words"
         case single = "Single"
@@ -101,195 +63,43 @@ public struct Portion: Codable {
         case heavyWavy = "HeavyWavy"
         case doubleWavy = "DoubleWavy"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = FontUnderline.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < FontUnderline.allCases.count {
-                self = FontUnderline.allCases[intValue]
-                return
-            }
-            self = FontUnderline.allCases[0]
-        }
     }
-    public enum StrikethroughType: String, Codable, CaseIterable { 
+    public enum StrikethroughType: String, Codable { 
         case _none = "None"
         case single = "Single"
         case double = "Double"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = StrikethroughType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < StrikethroughType.allCases.count {
-                self = StrikethroughType.allCases[intValue]
-                return
-            }
-            self = StrikethroughType.allCases[0]
-        }
     }
-    public enum TextCapType: String, Codable, CaseIterable { 
+    public enum TextCapType: String, Codable { 
         case _none = "None"
         case small = "Small"
         case all = "All"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TextCapType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TextCapType.allCases.count {
-                self = TextCapType.allCases[intValue]
-                return
-            }
-            self = TextCapType.allCases[0]
-        }
     }
-    public enum NormaliseHeight: String, Codable, CaseIterable { 
+    public enum NormaliseHeight: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NormaliseHeight.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NormaliseHeight.allCases.count {
-                self = NormaliseHeight.allCases[intValue]
-                return
-            }
-            self = NormaliseHeight.allCases[0]
-        }
     }
-    public enum ProofDisabled: String, Codable, CaseIterable { 
+    public enum ProofDisabled: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ProofDisabled.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ProofDisabled.allCases.count {
-                self = ProofDisabled.allCases[intValue]
-                return
-            }
-            self = ProofDisabled.allCases[0]
-        }
     }
-    public enum Kumimoji: String, Codable, CaseIterable { 
+    public enum Kumimoji: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Kumimoji.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Kumimoji.allCases.count {
-                self = Kumimoji.allCases[intValue]
-                return
-            }
-            self = Kumimoji.allCases[0]
-        }
     }
-    public enum IsHardUnderlineFill: String, Codable, CaseIterable { 
+    public enum IsHardUnderlineFill: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = IsHardUnderlineFill.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < IsHardUnderlineFill.allCases.count {
-                self = IsHardUnderlineFill.allCases[intValue]
-                return
-            }
-            self = IsHardUnderlineFill.allCases[0]
-        }
     }
-    public enum IsHardUnderlineLine: String, Codable, CaseIterable { 
+    public enum IsHardUnderlineLine: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = IsHardUnderlineLine.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < IsHardUnderlineLine.allCases.count {
-                self = IsHardUnderlineLine.allCases[intValue]
-                return
-            }
-            self = IsHardUnderlineLine.allCases[0]
-        }
     }
     /** Gets or sets the link to this resource. */
     public var selfUri: ResourceUri?

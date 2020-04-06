@@ -33,7 +33,7 @@ import Foundation
 
 public struct SmartArt: Codable {
 
-    public enum Layout: String, Codable, CaseIterable { 
+    public enum Layout: String, Codable { 
         case accentProcess = "AccentProcess"
         case accentedPicture = "AccentedPicture"
         case alternatingFlow = "AlternatingFlow"
@@ -170,27 +170,8 @@ public struct SmartArt: Codable {
         case verticalProcess = "VerticalProcess"
         case custom = "Custom"
         case pictureOrganizationChart = "PictureOrganizationChart"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Layout.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Layout.allCases.count {
-                self = Layout.allCases[intValue]
-                return
-            }
-            self = Layout.allCases[0]
-        }
     }
-    public enum QuickStyle: String, Codable, CaseIterable { 
+    public enum QuickStyle: String, Codable { 
         case simpleFill = "SimpleFill"
         case whiteOutline = "WhiteOutline"
         case subtleEffect = "SubtleEffect"
@@ -205,27 +186,8 @@ public struct SmartArt: Codable {
         case metallicScene = "MetallicScene"
         case sunsetScene = "SunsetScene"
         case birdsEyeScene = "BirdsEyeScene"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = QuickStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < QuickStyle.allCases.count {
-                self = QuickStyle.allCases[intValue]
-                return
-            }
-            self = QuickStyle.allCases[0]
-        }
     }
-    public enum ColorStyle: String, Codable, CaseIterable { 
+    public enum ColorStyle: String, Codable { 
         case dark1Outline = "Dark1Outline"
         case dark2Outline = "Dark2Outline"
         case darkFill = "DarkFill"
@@ -264,25 +226,6 @@ public struct SmartArt: Codable {
         case gradientRangeAccent6 = "GradientRangeAccent6"
         case gradientLoopAccent6 = "GradientLoopAccent6"
         case transparentGradientRangeAccent6 = "TransparentGradientRangeAccent6"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ColorStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ColorStyle.allCases.count {
-                self = ColorStyle.allCases[intValue]
-                return
-            }
-            self = ColorStyle.allCases[0]
-        }
     }
     /** Layout type. */
     public var layout: Layout?

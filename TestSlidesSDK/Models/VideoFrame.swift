@@ -33,56 +33,18 @@ import Foundation
 
 public struct VideoFrame: Codable {
 
-    public enum PlayMode: String, Codable, CaseIterable { 
+    public enum PlayMode: String, Codable { 
         case auto = "Auto"
         case onClick = "OnClick"
         case allSlides = "AllSlides"
         case mixed = "Mixed"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PlayMode.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PlayMode.allCases.count {
-                self = PlayMode.allCases[intValue]
-                return
-            }
-            self = PlayMode.allCases[0]
-        }
     }
-    public enum Volume: String, Codable, CaseIterable { 
+    public enum Volume: String, Codable { 
         case mute = "Mute"
         case low = "Low"
         case medium = "Medium"
         case loud = "Loud"
         case mixed = "Mixed"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Volume.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Volume.allCases.count {
-                self = Volume.allCases[intValue]
-                return
-            }
-            self = Volume.allCases[0]
-        }
     }
     /** Determines whether a video is shown in full screen mode. */
     public var fullScreenMode: Bool?

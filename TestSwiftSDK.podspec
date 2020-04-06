@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TestSwiftSDK'
-  s.version          = '1.0.1'
+  s.version          = '1.0.2'
   s.summary          = 'A test application to demonstrate CocoaPods usage.'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,7 @@ This is a test application to get acquainted with creating, deploying and using 
 
   s.platform = :osx
   s.osx.deployment_target = "10.12"
-  s.swift_version = "4.1"
+  s.swift_version = "4.2.3"
 
   s.source_files = 'TestSlidesSDK/**/*'
 
@@ -40,5 +40,4 @@ This is a test application to get acquainted with creating, deploying and using 
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'Cocoa'
-  s.dependency 'Alamofire', '~> 4.5.1'
 end

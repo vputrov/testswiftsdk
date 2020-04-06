@@ -33,80 +33,23 @@ import Foundation
 
 public struct HtmlExportOptions: Codable {
 
-    public enum PicturesCompression: String, Codable, CaseIterable { 
+    public enum PicturesCompression: String, Codable { 
         case dpi330 = "Dpi330"
         case dpi220 = "Dpi220"
         case dpi150 = "Dpi150"
         case dpi96 = "Dpi96"
         case dpi72 = "Dpi72"
         case documentResolution = "DocumentResolution"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PicturesCompression.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PicturesCompression.allCases.count {
-                self = PicturesCompression.allCases[intValue]
-                return
-            }
-            self = PicturesCompression.allCases[0]
-        }
     }
-    public enum NotesPosition: String, Codable, CaseIterable { 
+    public enum NotesPosition: String, Codable { 
         case _none = "None"
         case bottomFull = "BottomFull"
         case bottomTruncated = "BottomTruncated"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NotesPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NotesPosition.allCases.count {
-                self = NotesPosition.allCases[intValue]
-                return
-            }
-            self = NotesPosition.allCases[0]
-        }
     }
-    public enum CommentsPosition: String, Codable, CaseIterable { 
+    public enum CommentsPosition: String, Codable { 
         case _none = "None"
         case bottom = "Bottom"
         case _right = "Right"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CommentsPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CommentsPosition.allCases.count {
-                self = CommentsPosition.allCases[intValue]
-                return
-            }
-            self = CommentsPosition.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

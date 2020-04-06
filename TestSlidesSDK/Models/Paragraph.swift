@@ -33,7 +33,7 @@ import Foundation
 
 public struct Paragraph: Codable {
 
-    public enum Alignment: String, Codable, CaseIterable { 
+    public enum Alignment: String, Codable { 
         case _left = "Left"
         case center = "Center"
         case _right = "Right"
@@ -41,80 +41,23 @@ public struct Paragraph: Codable {
         case justifyLow = "JustifyLow"
         case distributed = "Distributed"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Alignment.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Alignment.allCases.count {
-                self = Alignment.allCases[intValue]
-                return
-            }
-            self = Alignment.allCases[0]
-        }
     }
-    public enum FontAlignment: String, Codable, CaseIterable { 
+    public enum FontAlignment: String, Codable { 
         case automatic = "Automatic"
         case top = "Top"
         case center = "Center"
         case bottom = "Bottom"
         case baseline = "Baseline"
         case _default = "Default"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = FontAlignment.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < FontAlignment.allCases.count {
-                self = FontAlignment.allCases[intValue]
-                return
-            }
-            self = FontAlignment.allCases[0]
-        }
     }
-    public enum BulletType: String, Codable, CaseIterable { 
+    public enum BulletType: String, Codable { 
         case _none = "None"
         case symbol = "Symbol"
         case numbered = "Numbered"
         case picture = "Picture"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = BulletType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < BulletType.allCases.count {
-                self = BulletType.allCases[intValue]
-                return
-            }
-            self = BulletType.allCases[0]
-        }
     }
-    public enum NumberedBulletStyle: String, Codable, CaseIterable { 
+    public enum NumberedBulletStyle: String, Codable { 
         case bulletAlphaLCPeriod = "BulletAlphaLCPeriod"
         case bulletAlphaUCPeriod = "BulletAlphaUCPeriod"
         case bulletArabicParenRight = "BulletArabicParenRight"
@@ -157,121 +100,26 @@ public struct Paragraph: Codable {
         case bulletHindiNumParenRight = "BulletHindiNumParenRight"
         case bulletHindiAlpha1Period = "BulletHindiAlpha1Period"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NumberedBulletStyle.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NumberedBulletStyle.allCases.count {
-                self = NumberedBulletStyle.allCases[intValue]
-                return
-            }
-            self = NumberedBulletStyle.allCases[0]
-        }
     }
-    public enum HangingPunctuation: String, Codable, CaseIterable { 
+    public enum HangingPunctuation: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = HangingPunctuation.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < HangingPunctuation.allCases.count {
-                self = HangingPunctuation.allCases[intValue]
-                return
-            }
-            self = HangingPunctuation.allCases[0]
-        }
     }
-    public enum EastAsianLineBreak: String, Codable, CaseIterable { 
+    public enum EastAsianLineBreak: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = EastAsianLineBreak.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < EastAsianLineBreak.allCases.count {
-                self = EastAsianLineBreak.allCases[intValue]
-                return
-            }
-            self = EastAsianLineBreak.allCases[0]
-        }
     }
-    public enum LatinLineBreak: String, Codable, CaseIterable { 
+    public enum LatinLineBreak: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = LatinLineBreak.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < LatinLineBreak.allCases.count {
-                self = LatinLineBreak.allCases[intValue]
-                return
-            }
-            self = LatinLineBreak.allCases[0]
-        }
     }
-    public enum RightToLeft: String, Codable, CaseIterable { 
+    public enum RightToLeft: String, Codable { 
         case _false = "False"
         case _true = "True"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = RightToLeft.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < RightToLeft.allCases.count {
-                self = RightToLeft.allCases[intValue]
-                return
-            }
-            self = RightToLeft.allCases[0]
-        }
     }
     /** Gets or sets the link to this resource. */
     public var selfUri: ResourceUri?

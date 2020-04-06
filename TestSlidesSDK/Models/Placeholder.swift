@@ -33,54 +33,16 @@ import Foundation
 
 public struct Placeholder: Codable {
 
-    public enum Orientation: String, Codable, CaseIterable { 
+    public enum Orientation: String, Codable { 
         case horizontal = "Horizontal"
         case vertical = "Vertical"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Orientation.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Orientation.allCases.count {
-                self = Orientation.allCases[intValue]
-                return
-            }
-            self = Orientation.allCases[0]
-        }
     }
-    public enum Size: String, Codable, CaseIterable { 
+    public enum Size: String, Codable { 
         case full = "Full"
         case half = "Half"
         case quarter = "Quarter"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Size.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Size.allCases.count {
-                self = Size.allCases[intValue]
-                return
-            }
-            self = Size.allCases[0]
-        }
     }
-    public enum ModelType: String, Codable, CaseIterable { 
+    public enum ModelType: String, Codable { 
         case title = "Title"
         case body = "Body"
         case centeredTitle = "CenteredTitle"
@@ -97,25 +59,6 @@ public struct Placeholder: Codable {
         case media = "Media"
         case slideImage = "SlideImage"
         case picture = "Picture"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ModelType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ModelType.allCases.count {
-                self = ModelType.allCases[intValue]
-                return
-            }
-            self = ModelType.allCases[0]
-        }
     }
     /** Gets or sets the link to this resource. */
     public var selfUri: ResourceUri?

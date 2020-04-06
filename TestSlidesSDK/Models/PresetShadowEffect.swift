@@ -33,7 +33,7 @@ import Foundation
 
 public struct PresetShadowEffect: Codable {
 
-    public enum Preset: String, Codable, CaseIterable { 
+    public enum Preset: String, Codable { 
         case topLeftDropShadow = "TopLeftDropShadow"
         case topLeftLargeDropShadow = "TopLeftLargeDropShadow"
         case backLeftLongPerspectiveShadow = "BackLeftLongPerspectiveShadow"
@@ -54,25 +54,6 @@ public struct PresetShadowEffect: Codable {
         case frontLeftPerspectiveShadow = "FrontLeftPerspectiveShadow"
         case frontRightPerspectiveShadow = "FrontRightPerspectiveShadow"
         case topLeftSmallDropShadow = "TopLeftSmallDropShadow"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Preset.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Preset.allCases.count {
-                self = Preset.allCases[intValue]
-                return
-            }
-            self = Preset.allCases[0]
-        }
     }
     /** direction */
     public var direction: Double?

@@ -33,28 +33,9 @@ import Foundation
 
 public struct PictureFill: Codable {
 
-    public enum PictureFillMode: String, Codable, CaseIterable { 
+    public enum PictureFillMode: String, Codable { 
         case tile = "Tile"
         case stretch = "Stretch"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PictureFillMode.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PictureFillMode.allCases.count {
-                self = PictureFillMode.allCases[intValue]
-                return
-            }
-            self = PictureFillMode.allCases[0]
-        }
     }
     /** Percentage of image height that is cropped from the bottom. */
     public var cropBottom: Double?

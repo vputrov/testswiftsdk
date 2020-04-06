@@ -33,31 +33,12 @@ import Foundation
 
 public struct SmartArtNode: Codable {
 
-    public enum OrgChartLayout: String, Codable, CaseIterable { 
+    public enum OrgChartLayout: String, Codable { 
         case initial = "Initial"
         case standart = "Standart"
         case bothHanging = "BothHanging"
         case leftHanging = "LeftHanging"
         case rightHanging = "RightHanging"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = OrgChartLayout.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < OrgChartLayout.allCases.count {
-                self = OrgChartLayout.allCases[intValue]
-                return
-            }
-            self = OrgChartLayout.allCases[0]
-        }
     }
     /** Node list. */
     public var nodes: [SmartArtNode]?

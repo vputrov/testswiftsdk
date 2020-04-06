@@ -33,7 +33,7 @@ import Foundation
 
 public struct Chart: Codable {
 
-    public enum ChartType: String, Codable, CaseIterable { 
+    public enum ChartType: String, Codable { 
         case clusteredColumn = "ClusteredColumn"
         case stackedColumn = "StackedColumn"
         case percentsStackedColumn = "PercentsStackedColumn"
@@ -108,25 +108,6 @@ public struct Chart: Codable {
         case radarWithMarkers = "RadarWithMarkers"
         case filledRadar = "FilledRadar"
         case seriesOfMixedTypes = "SeriesOfMixedTypes"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ChartType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ChartType.allCases.count {
-                self = ChartType.allCases[intValue]
-                return
-            }
-            self = ChartType.allCases[0]
-        }
     }
     /** Gets or sets the type of the chart. */
     public var chartType: ChartType?

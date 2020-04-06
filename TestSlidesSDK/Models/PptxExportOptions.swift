@@ -33,29 +33,10 @@ import Foundation
 
 public struct PptxExportOptions: Codable {
 
-    public enum Conformance: String, Codable, CaseIterable { 
+    public enum Conformance: String, Codable { 
         case ecma3762006 = "Ecma376_2006"
         case iso295002008Transitional = "Iso29500_2008_Transitional"
         case iso295002008Strict = "Iso29500_2008_Strict"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Conformance.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Conformance.allCases.count {
-                self = Conformance.allCases[intValue]
-                return
-            }
-            self = Conformance.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

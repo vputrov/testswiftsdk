@@ -33,34 +33,15 @@ import Foundation
 
 public struct TableCell: Codable {
 
-    public enum TextAnchorType: String, Codable, CaseIterable { 
+    public enum TextAnchorType: String, Codable { 
         case top = "Top"
         case center = "Center"
         case bottom = "Bottom"
         case justified = "Justified"
         case distributed = "Distributed"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TextAnchorType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TextAnchorType.allCases.count {
-                self = TextAnchorType.allCases[intValue]
-                return
-            }
-            self = TextAnchorType.allCases[0]
-        }
     }
-    public enum TextVerticalType: String, Codable, CaseIterable { 
+    public enum TextVerticalType: String, Codable { 
         case horizontal = "Horizontal"
         case vertical = "Vertical"
         case vertical270 = "Vertical270"
@@ -69,25 +50,6 @@ public struct TableCell: Codable {
         case mongolianVertical = "MongolianVertical"
         case wordArtVerticalRightToLeft = "WordArtVerticalRightToLeft"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TextVerticalType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TextVerticalType.allCases.count {
-                self = TextVerticalType.allCases[intValue]
-                return
-            }
-            self = TextVerticalType.allCases[0]
-        }
     }
     /** Cell text. */
     public var text: String?

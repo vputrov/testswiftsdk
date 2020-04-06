@@ -33,99 +33,23 @@ import Foundation
 
 public struct PdfExportOptions: Codable {
 
-    public enum TextCompression: String, Codable, CaseIterable { 
+    public enum TextCompression: String, Codable { 
         case _none = "None"
         case flate = "Flate"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TextCompression.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TextCompression.allCases.count {
-                self = TextCompression.allCases[intValue]
-                return
-            }
-            self = TextCompression.allCases[0]
-        }
     }
-    public enum Compliance: String, Codable, CaseIterable { 
+    public enum Compliance: String, Codable { 
         case pdf15 = "Pdf15"
         case pdfA1b = "PdfA1b"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Compliance.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Compliance.allCases.count {
-                self = Compliance.allCases[intValue]
-                return
-            }
-            self = Compliance.allCases[0]
-        }
     }
-    public enum NotesPosition: String, Codable, CaseIterable { 
+    public enum NotesPosition: String, Codable { 
         case _none = "None"
         case bottomFull = "BottomFull"
         case bottomTruncated = "BottomTruncated"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NotesPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NotesPosition.allCases.count {
-                self = NotesPosition.allCases[intValue]
-                return
-            }
-            self = NotesPosition.allCases[0]
-        }
     }
-    public enum CommentsPosition: String, Codable, CaseIterable { 
+    public enum CommentsPosition: String, Codable { 
         case _none = "None"
         case bottom = "Bottom"
         case _right = "Right"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CommentsPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CommentsPosition.allCases.count {
-                self = CommentsPosition.allCases[intValue]
-                return
-            }
-            self = CommentsPosition.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

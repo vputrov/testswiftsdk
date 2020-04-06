@@ -33,32 +33,13 @@ import Foundation
 
 public struct Axis: Codable {
 
-    public enum Position: String, Codable, CaseIterable { 
+    public enum Position: String, Codable { 
         case bottom = "Bottom"
         case _left = "Left"
         case _right = "Right"
         case top = "Top"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Position.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Position.allCases.count {
-                self = Position.allCases[intValue]
-                return
-            }
-            self = Position.allCases[0]
-        }
     }
-    public enum DisplayUnit: String, Codable, CaseIterable { 
+    public enum DisplayUnit: String, Codable { 
         case _none = "None"
         case hundreds = "Hundreds"
         case thousands = "Thousands"
@@ -70,219 +51,48 @@ public struct Axis: Codable {
         case billions = "Billions"
         case trillions = "Trillions"
         case customValue = "CustomValue"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = DisplayUnit.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < DisplayUnit.allCases.count {
-                self = DisplayUnit.allCases[intValue]
-                return
-            }
-            self = DisplayUnit.allCases[0]
-        }
     }
-    public enum BaseUnitScale: String, Codable, CaseIterable { 
+    public enum BaseUnitScale: String, Codable { 
         case days = "Days"
         case months = "Months"
         case years = "Years"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = BaseUnitScale.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < BaseUnitScale.allCases.count {
-                self = BaseUnitScale.allCases[intValue]
-                return
-            }
-            self = BaseUnitScale.allCases[0]
-        }
     }
-    public enum MajorUnitScale: String, Codable, CaseIterable { 
+    public enum MajorUnitScale: String, Codable { 
         case days = "Days"
         case months = "Months"
         case years = "Years"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = MajorUnitScale.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < MajorUnitScale.allCases.count {
-                self = MajorUnitScale.allCases[intValue]
-                return
-            }
-            self = MajorUnitScale.allCases[0]
-        }
     }
-    public enum MajorTickMark: String, Codable, CaseIterable { 
+    public enum MajorTickMark: String, Codable { 
         case cross = "Cross"
         case inside = "Inside"
         case _none = "None"
         case outside = "Outside"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = MajorTickMark.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < MajorTickMark.allCases.count {
-                self = MajorTickMark.allCases[intValue]
-                return
-            }
-            self = MajorTickMark.allCases[0]
-        }
     }
-    public enum MinorUnitScale: String, Codable, CaseIterable { 
+    public enum MinorUnitScale: String, Codable { 
         case days = "Days"
         case months = "Months"
         case years = "Years"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = MinorUnitScale.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < MinorUnitScale.allCases.count {
-                self = MinorUnitScale.allCases[intValue]
-                return
-            }
-            self = MinorUnitScale.allCases[0]
-        }
     }
-    public enum MinorTickMark: String, Codable, CaseIterable { 
+    public enum MinorTickMark: String, Codable { 
         case cross = "Cross"
         case inside = "Inside"
         case _none = "None"
         case outside = "Outside"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = MinorTickMark.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < MinorTickMark.allCases.count {
-                self = MinorTickMark.allCases[intValue]
-                return
-            }
-            self = MinorTickMark.allCases[0]
-        }
     }
-    public enum CategoryAxisType: String, Codable, CaseIterable { 
+    public enum CategoryAxisType: String, Codable { 
         case text = "Text"
         case date = "Date"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CategoryAxisType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CategoryAxisType.allCases.count {
-                self = CategoryAxisType.allCases[intValue]
-                return
-            }
-            self = CategoryAxisType.allCases[0]
-        }
     }
-    public enum CrossType: String, Codable, CaseIterable { 
+    public enum CrossType: String, Codable { 
         case axisCrossesAtZero = "AxisCrossesAtZero"
         case maximum = "Maximum"
         case custom = "Custom"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CrossType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CrossType.allCases.count {
-                self = CrossType.allCases[intValue]
-                return
-            }
-            self = CrossType.allCases[0]
-        }
     }
-    public enum TickLabelPosition: String, Codable, CaseIterable { 
+    public enum TickLabelPosition: String, Codable { 
         case high = "High"
         case low = "Low"
         case nextTo = "NextTo"
         case _none = "None"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TickLabelPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TickLabelPosition.allCases.count {
-                self = TickLabelPosition.allCases[intValue]
-                return
-            }
-            self = TickLabelPosition.allCases[0]
-        }
     }
     /** True if the axis is visible */
     public var isVisible: Bool?

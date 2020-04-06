@@ -33,53 +33,15 @@ import Foundation
 
 public struct ImageExportOptions: Codable {
 
-    public enum NotesPosition: String, Codable, CaseIterable { 
+    public enum NotesPosition: String, Codable { 
         case _none = "None"
         case bottomFull = "BottomFull"
         case bottomTruncated = "BottomTruncated"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NotesPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NotesPosition.allCases.count {
-                self = NotesPosition.allCases[intValue]
-                return
-            }
-            self = NotesPosition.allCases[0]
-        }
     }
-    public enum CommentsPosition: String, Codable, CaseIterable { 
+    public enum CommentsPosition: String, Codable { 
         case _none = "None"
         case bottom = "Bottom"
         case _right = "Right"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CommentsPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CommentsPosition.allCases.count {
-                self = CommentsPosition.allCases[intValue]
-                return
-            }
-            self = CommentsPosition.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

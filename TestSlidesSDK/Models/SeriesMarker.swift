@@ -33,7 +33,7 @@ import Foundation
 
 public struct SeriesMarker: Codable {
 
-    public enum Symbol: String, Codable, CaseIterable { 
+    public enum Symbol: String, Codable { 
         case circle = "Circle"
         case dash = "Dash"
         case diamond = "Diamond"
@@ -46,25 +46,6 @@ public struct SeriesMarker: Codable {
         case triangle = "Triangle"
         case x = "X"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Symbol.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Symbol.allCases.count {
-                self = Symbol.allCases[intValue]
-                return
-            }
-            self = Symbol.allCases[0]
-        }
     }
     /** size */
     public var size: Int?

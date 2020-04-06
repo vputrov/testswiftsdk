@@ -33,7 +33,7 @@ import Foundation
 
 public struct PatternFill: Codable {
 
-    public enum Style: String, Codable, CaseIterable { 
+    public enum Style: String, Codable { 
         case unknown = "Unknown"
         case percent05 = "Percent05"
         case percent10 = "Percent10"
@@ -90,25 +90,6 @@ public struct PatternFill: Codable {
         case upwardDiagonal = "UpwardDiagonal"
         case diagonalCross = "DiagonalCross"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Style.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Style.allCases.count {
-                self = Style.allCases[intValue]
-                return
-            }
-            self = Style.allCases[0]
-        }
     }
     /** Gets or sets the back color of the pattern fill. */
     public var backColor: String?

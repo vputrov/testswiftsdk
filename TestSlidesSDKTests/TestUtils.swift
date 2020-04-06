@@ -27,7 +27,7 @@
 
 import Foundation
 import XCTest
-@testable import TestSlidesSDK
+@testable import AsposeSlidesCloud
 
 class TestUtils {
     static var isInitialized = false
@@ -79,7 +79,7 @@ class TestUtils {
         }
         if (value is NSDictionary) {
             do {
-                var jsonData = try JSONSerialization.data(withJSONObject: value as! NSDictionary)
+                let jsonData = try JSONSerialization.data(withJSONObject: value as! NSDictionary)
                 let result: (decodableObj: T?, error: Error?) = CodableHelper.decode(T.self, from: jsonData)
                 return result.decodableObj!
             } catch {
@@ -95,7 +95,7 @@ class TestUtils {
         }
         if (invalidValue is NSDictionary) {
             do {
-                var jsonData = try JSONSerialization.data(withJSONObject: invalidValue as! NSDictionary)
+                let jsonData = try JSONSerialization.data(withJSONObject: invalidValue as! NSDictionary)
                 let result: (decodableObj: T?, error: Error?) = CodableHelper.decode(T.self, from: jsonData)
                 return result.decodableObj!
             } catch {
@@ -163,28 +163,25 @@ class TestUtils {
     
     class func initialize(_ functionName: String, _ parameterName: String = "", _ parameterValue: Any? = nil, completion: @escaping ((_ data: Data?,_ error: Error?) -> Void)) {
         ensureTestFiles() { error -> Void in
-            do {
-                ensureRules()
-                let f = rules!["Files"]! as! NSArray
-                let rules = NSMutableDictionary()
-                for file in f {
-                    let rule = file as! NSDictionary
-                    if (isGoodRule(rule, functionName, parameterName)) {
-                        let actualName = untemplatize(rule["File"], parameterValue) as! String
-                        var path = "TempSlidesSDK"
-                        if (rule["Folder"] != nil) {
-                            path = untemplatize(rule["Folder"], parameterValue) as! String
-                        }
-                        path = path + "/" + actualName
-                        let mRule = rule.mutableCopy() as! NSMutableDictionary
-                        mRule["ActualName"] = actualName
-                        rules[path] = mRule
+            ensureRules()
+            let f = rules!["Files"]! as! NSArray
+            let frules = NSMutableDictionary()
+            for file in f {
+                let rule = file as! NSDictionary
+                if (isGoodRule(rule, functionName, parameterName)) {
+                    let actualName = untemplatize(rule["File"], parameterValue) as! String
+                    var path = "TempSlidesSDK"
+                    if (rule["Folder"] != nil) {
+                        path = untemplatize(rule["Folder"], parameterValue) as! String
                     }
+                    path = path + "/" + actualName
+                    let mRule = rule.mutableCopy() as! NSMutableDictionary
+                    mRule["ActualName"] = actualName
+                    frules[path] = mRule
                 }
-                initializeRules(functionName: functionName, parameterName: parameterName, ruleIndex: 0, rules: rules) { (response, error) -> Void in
-                    completion(nil, error)
-                }
-            } catch {
+            }
+            initializeRules(functionName: functionName, parameterName: parameterName, ruleIndex: 0, rules: frules) { (response, error) -> Void in
+                completion(nil, error)
             }
         }
     }
@@ -194,7 +191,7 @@ class TestUtils {
             do {
                 let file = FileManager.default.contents(atPath: "testRules.json")
                 let json = try JSONSerialization.jsonObject(with: file!)
-                rules = json as! NSDictionary
+                rules = json as? NSDictionary
             } catch {
             }
         }
@@ -215,7 +212,7 @@ class TestUtils {
                     }
                 }
             } else if (action == "Delete") {
-                let cr = deleteFileRequest(path: path as! String, storageName: "", versionId: "")
+                let cr = deleteFileRequest(path: path, storageName: "", versionId: "")
                     SlidesAPI.deleteFile(request: cr) { (response, error) -> Void in
                         initializeRules(functionName: functionName, parameterName: parameterName, ruleIndex: ruleIndex + 1, rules: rules) { (response, error) -> Void in
                             completion(response, error)
@@ -234,7 +231,7 @@ class TestUtils {
             do {
                 let file = FileManager.default.contents(atPath: "testConfig.json")
                 let json = try JSONSerialization.jsonObject(with: file!)
-                let config = json as! NSDictionary
+                let config = json as! [String:Any]
                 if config["AppSid"] != nil {
                     AsposeSlidesCloudAPI.appSid = config["AppSid"] as! String
                 }
@@ -283,16 +280,12 @@ class TestUtils {
 
     class func uploadFiles(files: [String], fileIndex: Int, completion: @escaping ((_ data: Data?,_ error: Error?) -> Void)) {
         if (fileIndex < files.count) {
-            do {
-                let fileData = try FileManager.default.contents(atPath: "TestData/" + files[fileIndex])
-                let r = uploadFileRequest(path: "TempTests/" + files[fileIndex], file: fileData!, storageName: "")
-                SlidesAPI.uploadFile(request: r) { (response, error) -> Void in
-                    uploadFiles(files: files, fileIndex: fileIndex + 1) { (response, error) -> Void in
-                        completion(response, error)
-                    }
+            let fileData = FileManager.default.contents(atPath: "TestData/" + files[fileIndex])
+            let r = uploadFileRequest(path: "TempTests/" + files[fileIndex], file: fileData!, storageName: "")
+            SlidesAPI.uploadFile(request: r) { (response, error) -> Void in
+                uploadFiles(files: files, fileIndex: fileIndex + 1) { (response, error) -> Void in
+                    completion(response, error)
                 }
-            } catch {
-                
             }
         } else {
             completion(nil, nil)
@@ -328,7 +321,7 @@ class TestUtils {
             XCTAssertNotNil(error)
             if (error != nil) {
                 switch (error!) {
-                case ErrorResponse.error(let actualCode, let data, let innerException):
+                case ErrorResponse.error(let actualCode, let data, _):
                     XCTAssertEqual(code, actualCode)
                     XCTAssertTrue(String(decoding: data!, as: UTF8.self).contains(message))
                 default:
@@ -339,10 +332,10 @@ class TestUtils {
     }
     
     class func isGoodRule(_ rule: NSDictionary, _ functionName: String, _ parameterName: String) -> Bool {
-        var ruleMethod = rule["Method"]
-        var ruleInvalid = rule["Invalid"]
-        var ruleParameter = rule["Parameter"]
-        var ruleLanguage = rule["Language"]
+        let ruleMethod = rule["Method"]
+        let ruleInvalid = rule["Invalid"]
+        let ruleParameter = rule["Parameter"]
+        let ruleLanguage = rule["Language"]
         return ((ruleMethod == nil) || (functionName.caseInsensitiveCompare(ruleMethod as! String) == .orderedSame))
             && ((ruleInvalid == nil) || (ruleInvalid as! Bool) == (parameterName != ""))
             && ((ruleParameter == nil) || parameterName.caseInsensitiveCompare(ruleParameter as! String) == .orderedSame)

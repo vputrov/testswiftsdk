@@ -33,31 +33,12 @@ import Foundation
 
 public struct FillOverlayEffect: Codable {
 
-    public enum Blend: String, Codable, CaseIterable { 
+    public enum Blend: String, Codable { 
         case darken = "Darken"
         case lighten = "Lighten"
         case multiply = "Multiply"
         case overlay = "Overlay"
         case screen = "Screen"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Blend.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Blend.allCases.count {
-                self = Blend.allCases[intValue]
-                return
-            }
-            self = Blend.allCases[0]
-        }
     }
     /** blend mode */
     public var blend: Blend?

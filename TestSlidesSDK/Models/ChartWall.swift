@@ -33,30 +33,11 @@ import Foundation
 
 public struct ChartWall: Codable {
 
-    public enum PictureType: String, Codable, CaseIterable { 
+    public enum PictureType: String, Codable { 
         case stack = "Stack"
         case stackScale = "StackScale"
         case stretch = "Stretch"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PictureType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PictureType.allCases.count {
-                self = PictureType.allCases[intValue]
-                return
-            }
-            self = PictureType.allCases[0]
-        }
     }
     /** Get or sets the fill format. */
     public var fillFormat: FillFormat?

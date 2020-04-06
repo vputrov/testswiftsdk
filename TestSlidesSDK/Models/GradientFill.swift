@@ -33,84 +33,27 @@ import Foundation
 
 public struct GradientFill: Codable {
 
-    public enum Direction: String, Codable, CaseIterable { 
+    public enum Direction: String, Codable { 
         case fromCorner1 = "FromCorner1"
         case fromCorner2 = "FromCorner2"
         case fromCorner3 = "FromCorner3"
         case fromCorner4 = "FromCorner4"
         case fromCenter = "FromCenter"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Direction.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Direction.allCases.count {
-                self = Direction.allCases[intValue]
-                return
-            }
-            self = Direction.allCases[0]
-        }
     }
-    public enum Shape: String, Codable, CaseIterable { 
+    public enum Shape: String, Codable { 
         case linear = "Linear"
         case rectangle = "Rectangle"
         case radial = "Radial"
         case path = "Path"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Shape.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Shape.allCases.count {
-                self = Shape.allCases[intValue]
-                return
-            }
-            self = Shape.allCases[0]
-        }
     }
-    public enum TileFlip: String, Codable, CaseIterable { 
+    public enum TileFlip: String, Codable { 
         case noFlip = "NoFlip"
         case flipX = "FlipX"
         case flipY = "FlipY"
         case flipBoth = "FlipBoth"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TileFlip.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TileFlip.allCases.count {
-                self = TileFlip.allCases[intValue]
-                return
-            }
-            self = TileFlip.allCases[0]
-        }
     }
     /** Gradient style. */
     public var direction: Direction?

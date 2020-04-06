@@ -26,7 +26,6 @@
  */
 
 import Foundation
-import Alamofire
 
 open class AsposeSlidesCloudAPI {
     public static var basePath = "https://api.aspose.cloud"
@@ -67,14 +66,25 @@ open class RequestBuilder<T> {
     
     open func authenticate(completion: @escaping(() -> Void)) {
         if AsposeSlidesCloudAPI.authToken == nil {
-            Alamofire.request("\(AsposeSlidesCloudAPI.authBasePath)/connect/token", method: .post, parameters: [ "grant_type": "client_credentials", "client_id": AsposeSlidesCloudAPI.appSid, "client_secret": AsposeSlidesCloudAPI.appKey], headers: ["Content-Type": "application/x-www-form-urlencoded"]).responseJSON {
-                responseJSON in
-                if responseJSON.response?.statusCode == 200 {
-                    let result = responseJSON.result.value as? [String: Any]
-                    AsposeSlidesCloudAPI.authToken = result!["access_token"] as? String
+            var request = URLRequest(url: URL(string: "\(AsposeSlidesCloudAPI.authBasePath)/connect/token")!)
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            let postString = "grant_type=client_credentials&client_id=\(AsposeSlidesCloudAPI.appSid)&client_secret=\(AsposeSlidesCloudAPI.appKey)";
+            request.httpBody = postString.data(using: String.Encoding.utf8);
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if error == nil && (200 ... 299) ~= (response as? HTTPURLResponse)!.statusCode && data != nil {
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
+                        if json != nil {
+                            AsposeSlidesCloudAPI.authToken = json!["access_token"] as? String
+                        }
+                    } catch {
+                    }
                 }
                 completion()
             }
+            task.resume()
         }
         else {
             completion()

@@ -33,7 +33,7 @@ import Foundation
 
 public struct Table: Codable {
 
-    public enum Style: String, Codable, CaseIterable { 
+    public enum Style: String, Codable { 
         case _none = "None"
         case mediumStyle2Accent1 = "MediumStyle2Accent1"
         case mediumStyle2 = "MediumStyle2"
@@ -110,25 +110,6 @@ public struct Table: Codable {
         case darkStyle2Accent5Accent6 = "DarkStyle2Accent5Accent6"
         case lightStyle1Accent5 = "LightStyle1Accent5"
         case custom = "Custom"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Style.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Style.allCases.count {
-                self = Style.allCases[intValue]
-                return
-            }
-            self = Style.allCases[0]
-        }
     }
     /** Builtin table style. */
     public var style: Style?

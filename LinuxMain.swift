@@ -25,50 +25,9 @@
  * --------------------------------------------------------------------------------------------------------------------
  */
 
+import XCTest
+import AsposeSlidesCloudTests
 
-import Foundation
-
-
-/** Save slide task. */
-
-public struct Save: Codable {
-
-    public enum Format: String, Codable { 
-        case pdf = "Pdf"
-        case xps = "Xps"
-        case tiff = "Tiff"
-        case pptx = "Pptx"
-        case odp = "Odp"
-        case otp = "Otp"
-        case ppt = "Ppt"
-        case pps = "Pps"
-        case ppsx = "Ppsx"
-        case pptm = "Pptm"
-        case ppsm = "Ppsm"
-        case pot = "Pot"
-        case potx = "Potx"
-        case potm = "Potm"
-        case html = "Html"
-        case swf = "Swf"
-        case svg = "Svg"
-        case jpeg = "Jpeg"
-        case png = "Png"
-        case gif = "Gif"
-        case bmp = "Bmp"
-    }
-    /** Format. */
-    public var format: Format?
-    /** Output file. */
-    public var output: OutputFile?
-    /** Save options. */
-    public var options: ExportOptions?
-
-    public init(format: Format?, output: OutputFile?, options: ExportOptions?) {
-        self.format = format
-        self.output = output
-        self.options = options
-    }
-
-
-}
-
+var tests = [XCTestCaseEntry]()
+tests += AsposeSlidesCloudTests.allTests()
+XCTMain(tests)

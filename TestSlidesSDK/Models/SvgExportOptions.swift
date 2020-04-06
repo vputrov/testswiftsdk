@@ -33,56 +33,18 @@ import Foundation
 
 public struct SvgExportOptions: Codable {
 
-    public enum PicturesCompression: String, Codable, CaseIterable { 
+    public enum PicturesCompression: String, Codable { 
         case dpi330 = "Dpi330"
         case dpi220 = "Dpi220"
         case dpi150 = "Dpi150"
         case dpi96 = "Dpi96"
         case dpi72 = "Dpi72"
         case documentResolution = "DocumentResolution"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PicturesCompression.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PicturesCompression.allCases.count {
-                self = PicturesCompression.allCases[intValue]
-                return
-            }
-            self = PicturesCompression.allCases[0]
-        }
     }
-    public enum ExternalFontsHandling: String, Codable, CaseIterable { 
+    public enum ExternalFontsHandling: String, Codable { 
         case addLinksToFontFiles = "AddLinksToFontFiles"
         case embed = "Embed"
         case vectorize = "Vectorize"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ExternalFontsHandling.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ExternalFontsHandling.allCases.count {
-                self = ExternalFontsHandling.allCases[intValue]
-                return
-            }
-            self = ExternalFontsHandling.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

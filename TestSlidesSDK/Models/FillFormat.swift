@@ -33,32 +33,13 @@ import Foundation
 
 public struct FillFormat: Codable {
 
-    public enum ModelType: String, Codable, CaseIterable { 
+    public enum ModelType: String, Codable { 
         case noFill = "NoFill"
         case solid = "Solid"
         case gradient = "Gradient"
         case pattern = "Pattern"
         case picture = "Picture"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ModelType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ModelType.allCases.count {
-                self = ModelType.allCases[intValue]
-                return
-            }
-            self = ModelType.allCases[0]
-        }
     }
     public var type: ModelType?
 

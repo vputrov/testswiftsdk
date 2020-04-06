@@ -33,106 +33,30 @@ import Foundation
 
 public struct TiffExportOptions: Codable {
 
-    public enum Compression: String, Codable, CaseIterable { 
+    public enum Compression: String, Codable { 
         case _default = "Default"
         case _none = "None"
         case ccitt3 = "CCITT3"
         case ccitt4 = "CCITT4"
         case lzw = "LZW"
         case rle = "RLE"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Compression.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Compression.allCases.count {
-                self = Compression.allCases[intValue]
-                return
-            }
-            self = Compression.allCases[0]
-        }
     }
-    public enum PixelFormat: String, Codable, CaseIterable { 
+    public enum PixelFormat: String, Codable { 
         case format1bppIndexed = "Format1bppIndexed"
         case format4bppIndexed = "Format4bppIndexed"
         case format8bppIndexed = "Format8bppIndexed"
         case format24bppRgb = "Format24bppRgb"
         case format32bppArgb = "Format32bppArgb"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PixelFormat.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PixelFormat.allCases.count {
-                self = PixelFormat.allCases[intValue]
-                return
-            }
-            self = PixelFormat.allCases[0]
-        }
     }
-    public enum NotesPosition: String, Codable, CaseIterable { 
+    public enum NotesPosition: String, Codable { 
         case _none = "None"
         case bottomFull = "BottomFull"
         case bottomTruncated = "BottomTruncated"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = NotesPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < NotesPosition.allCases.count {
-                self = NotesPosition.allCases[intValue]
-                return
-            }
-            self = NotesPosition.allCases[0]
-        }
     }
-    public enum CommentsPosition: String, Codable, CaseIterable { 
+    public enum CommentsPosition: String, Codable { 
         case _none = "None"
         case bottom = "Bottom"
         case _right = "Right"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = CommentsPosition.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < CommentsPosition.allCases.count {
-                self = CommentsPosition.allCases[intValue]
-                return
-            }
-            self = CommentsPosition.allCases[0]
-        }
     }
     /** Export format. */
     public var format: String?

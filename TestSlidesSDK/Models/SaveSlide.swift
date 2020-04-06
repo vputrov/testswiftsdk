@@ -33,7 +33,7 @@ import Foundation
 
 public struct SaveSlide: Codable {
 
-    public enum Format: String, Codable, CaseIterable { 
+    public enum Format: String, Codable { 
         case jpeg = "Jpeg"
         case png = "Png"
         case gif = "Gif"
@@ -54,25 +54,6 @@ public struct SaveSlide: Codable {
         case pot = "Pot"
         case potm = "Potm"
         case svg = "Svg"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Format.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Format.allCases.count {
-                self = Format.allCases[intValue]
-                return
-            }
-            self = Format.allCases[0]
-        }
     }
     /** Output to save the slide to. */
     public var output: OutputFile?

@@ -33,28 +33,9 @@ import Foundation
 
 public struct PlotArea: Codable {
 
-    public enum LayoutTargetType: String, Codable, CaseIterable { 
+    public enum LayoutTargetType: String, Codable { 
         case inner = "Inner"
         case outer = "Outer"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = LayoutTargetType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < LayoutTargetType.allCases.count {
-                self = LayoutTargetType.allCases[intValue]
-                return
-            }
-            self = LayoutTargetType.allCases[0]
-        }
     }
     /** the X location */
     public var X: Double?

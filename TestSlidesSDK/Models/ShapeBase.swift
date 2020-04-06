@@ -33,7 +33,7 @@ import Foundation
 
 public struct ShapeBase: Codable {
 
-    public enum ModelType: String, Codable, CaseIterable { 
+    public enum ModelType: String, Codable { 
         case shape = "Shape"
         case chart = "Chart"
         case table = "Table"
@@ -46,27 +46,8 @@ public struct ShapeBase: Codable {
         case graphicalObject = "GraphicalObject"
         case connector = "Connector"
         case smartArtShape = "SmartArtShape"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ModelType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ModelType.allCases.count {
-                self = ModelType.allCases[intValue]
-                return
-            }
-            self = ModelType.allCases[0]
-        }
     }
-    public enum ShapeType: String, Codable, CaseIterable { 
+    public enum ShapeType: String, Codable { 
         case custom = "Custom"
         case line = "Line"
         case lineInverse = "LineInverse"
@@ -265,25 +246,6 @@ public struct ShapeBase: Codable {
         case groupShape = "GroupShape"
         case graphicalObject = "GraphicalObject"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ShapeType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ShapeType.allCases.count {
-                self = ShapeType.allCases[intValue]
-                return
-            }
-            self = ShapeType.allCases[0]
-        }
     }
     /** Gets or sets the link to this resource. */
     public var selfUri: ResourceUri?

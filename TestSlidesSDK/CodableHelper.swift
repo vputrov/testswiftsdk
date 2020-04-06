@@ -76,6 +76,10 @@ open class CodableHelper {
     open class func encode<T>(_ value: T, prettyPrint: Bool = false) -> EncodeResult where T : Encodable {
         var returnedData: Data?
         var returnedError: Error? = nil
+        
+        if (value is Data) {
+            return (value as? Data, nil)
+        }
 
         let encoder = JSONEncoder()
         if prettyPrint {

@@ -33,29 +33,10 @@ import Foundation
 
 public struct BubbleSeries: Codable {
 
-    public enum DataPointType: String, Codable, CaseIterable { 
+    public enum DataPointType: String, Codable { 
         case oneValue = "OneValue"
         case scatter = "Scatter"
         case bubble = "Bubble"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = DataPointType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < DataPointType.allCases.count {
-                self = DataPointType.allCases[intValue]
-                return
-            }
-            self = DataPointType.allCases[0]
-        }
     }
     /** Series name. */
     public var name: String?

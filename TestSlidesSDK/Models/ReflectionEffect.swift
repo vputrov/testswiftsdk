@@ -33,7 +33,7 @@ import Foundation
 
 public struct ReflectionEffect: Codable {
 
-    public enum RectangleAlign: String, Codable, CaseIterable { 
+    public enum RectangleAlign: String, Codable { 
         case topLeft = "TopLeft"
         case top = "Top"
         case topRight = "TopRight"
@@ -44,25 +44,6 @@ public struct ReflectionEffect: Codable {
         case bottom = "Bottom"
         case bottomRight = "BottomRight"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = RectangleAlign.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < RectangleAlign.allCases.count {
-                self = RectangleAlign.allCases[intValue]
-                return
-            }
-            self = RectangleAlign.allCases[0]
-        }
     }
     /** direction */
     public var direction: Double?

@@ -27,7 +27,6 @@
 
 
 import Foundation
-import Alamofire
 
 
 

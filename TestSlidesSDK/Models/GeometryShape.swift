@@ -33,7 +33,7 @@ import Foundation
 
 public struct GeometryShape: Codable {
 
-    public enum GeometryShapeType: String, Codable, CaseIterable { 
+    public enum GeometryShapeType: String, Codable { 
         case custom = "Custom"
         case line = "Line"
         case lineInverse = "LineInverse"
@@ -223,25 +223,6 @@ public struct GeometryShape: Codable {
         case chartStar = "ChartStar"
         case chartPlus = "ChartPlus"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = GeometryShapeType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < GeometryShapeType.allCases.count {
-                self = GeometryShapeType.allCases[intValue]
-                return
-            }
-            self = GeometryShapeType.allCases[0]
-        }
     }
     /** Geometry shape type. */
     public var geometryShapeType: GeometryShapeType?

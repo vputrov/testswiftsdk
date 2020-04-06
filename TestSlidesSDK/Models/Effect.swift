@@ -33,7 +33,7 @@ import Foundation
 
 public struct Effect: Codable {
 
-    public enum ModelType: String, Codable, CaseIterable { 
+    public enum ModelType: String, Codable { 
         case appear = "Appear"
         case curveUpDown = "CurveUpDown"
         case ascend = "Ascend"
@@ -189,27 +189,8 @@ public struct Effect: Codable {
         case oleobjectshow = "OLEObjectShow"
         case oleobjectedit = "OLEObjectEdit"
         case oleobjectopen = "OLEObjectOpen"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = ModelType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < ModelType.allCases.count {
-                self = ModelType.allCases[intValue]
-                return
-            }
-            self = ModelType.allCases[0]
-        }
     }
-    public enum Subtype: String, Codable, CaseIterable { 
+    public enum Subtype: String, Codable { 
         case _none = "None"
         case across = "Across"
         case bottom = "Bottom"
@@ -260,101 +241,25 @@ public struct Effect: Codable {
         case wheel3 = "Wheel3"
         case wheel4 = "Wheel4"
         case wheel8 = "Wheel8"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Subtype.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Subtype.allCases.count {
-                self = Subtype.allCases[intValue]
-                return
-            }
-            self = Subtype.allCases[0]
-        }
     }
-    public enum PresetClassType: String, Codable, CaseIterable { 
+    public enum PresetClassType: String, Codable { 
         case entrance = "Entrance"
         case exit = "Exit"
         case emphasis = "Emphasis"
         case path = "Path"
         case mediaCall = "MediaCall"
         case oleactionverbs = "OLEActionVerbs"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = PresetClassType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < PresetClassType.allCases.count {
-                self = PresetClassType.allCases[intValue]
-                return
-            }
-            self = PresetClassType.allCases[0]
-        }
     }
-    public enum TriggerType: String, Codable, CaseIterable { 
+    public enum TriggerType: String, Codable { 
         case afterPrevious = "AfterPrevious"
         case onClick = "OnClick"
         case withPrevious = "WithPrevious"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = TriggerType.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < TriggerType.allCases.count {
-                self = TriggerType.allCases[intValue]
-                return
-            }
-            self = TriggerType.allCases[0]
-        }
     }
-    public enum Restart: String, Codable, CaseIterable { 
+    public enum Restart: String, Codable { 
         case always = "Always"
         case whenNotActive = "WhenNotActive"
         case never = "Never"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Restart.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Restart.allCases.count {
-                self = Restart.allCases[intValue]
-                return
-            }
-            self = Restart.allCases[0]
-        }
     }
     /** Effect type. */
     public var type: ModelType?

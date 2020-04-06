@@ -26,7 +26,6 @@
  */
 
 import Foundation
-import Alamofire
 
 class AlamofireRequestBuilderFactory: RequestBuilderFactory {
     func getNonDecodableBuilder<T>() -> RequestBuilder<T>.Type {
@@ -38,25 +37,9 @@ class AlamofireRequestBuilderFactory: RequestBuilderFactory {
     }
 }
 
-// Store manager to retain its reference
-private var managerStore: [String: Alamofire.SessionManager] = [:]
-
-// Sync queue to manage safe access to the store manager
-private let syncQueue = DispatchQueue(label: "thread-safe-sync-queue", attributes: .concurrent)
-
 open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
     required public init(method: String, URLString: String, parameters: [String : Any]?, isBody: Bool, headers: [String : String] = [:]) {
         super.init(method: method, URLString: URLString, parameters: parameters, isBody: isBody, headers: headers)
-    }
-
-    /**
-     May be overridden by a subclass if you want to control the session
-     configuration.
-     */
-    open func createSessionManager() -> Alamofire.SessionManager {
-        let configuration = URLSessionConfiguration.default
-        configuration.httpAdditionalHeaders = buildHeaders()
-        return Alamofire.SessionManager(configuration: configuration)
     }
 
     /**
@@ -74,21 +57,13 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
      May be overridden by a subclass if you want to control the request
      configuration (e.g. to override the cache policy).
      */
-    open func makeRequest(manager: SessionManager, method: HTTPMethod, encoding: ParameterEncoding, headers: [String:String]) -> DataRequest {
-        return manager.request(URLString, method: method, parameters: parameters, encoding: encoding, headers: headers)
+    open func makeRequest(method: String, headers: [String:String]) -> URLRequest {
+        return URLRequest(url: URL(string: URLString)!)
+        //return manager.request(URLString, method: method, parameters: parameters, encoding: encoding, headers: headers)
     }
 
     override open func execute(_ completion: @escaping (_ response: Response<T>?, _ error: Error?) -> Void) {
-        let managerId:String = UUID().uuidString
-        // Create a new manager for each request to customize its request header
-        let manager = createSessionManager()
-        syncQueue.async(flags: .barrier) {
-            managerStore[managerId] = manager
-        }
 
-        let encoding:ParameterEncoding = isBody ? JSONDataEncoding() : URLEncoding()
-
-        let xMethod = Alamofire.HTTPMethod(rawValue: method)
         let fileKeys = parameters == nil ? [] : parameters!.filter { $1 is NSURL }
                                                            .map { $0.0 }
         let dataKeys = parameters == nil ? [] : parameters!.filter { $1 is Data }.map { $0.0 }
@@ -97,16 +72,19 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
             let data = parameters![key] as! Data
             if key == "jsonData" {
                 headers["Content-Type"] = "text/json"
+            } else if key == "data" {
+                headers["Content-Type"] = "application/octet-stream"
             }
             /*let request = makeRequest(manager: manager, method: xMethod!, encoding: encoding, headers: headers)
-            request.httpBody = data
             if let onProgressReady = self.onProgressReady {
                 onProgressReady(request.progress)
             }*/
-            let request = manager.upload(data, to: URLString, method: xMethod!, headers: headers)
-            processRequest(request: request, managerId, completion)
+            var request = URLRequest(url: URL(string: URLString)!)
+            request.httpBody = data
+            //let request = DataRequest()//manager.upload(data, to: URLString, method: xMethod!, headers: headers)
+            processRequest(request: request, completion)
         } else if fileKeys.count > 0 {
-            manager.upload(multipartFormData: { mpForm in
+            /*manager.upload(multipartFormData: { mpForm in
                 for (k, v) in self.parameters! {
                     switch v {
                     case let fileURL as URL:
@@ -134,36 +112,69 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 case .failure(let encodingError):
                     completion(nil, ErrorResponse.error(415, nil, encodingError))
                 }
-            })
+            })*/
         } else {
-            let request = makeRequest(manager: manager, method: xMethod!, encoding: encoding, headers: headers)
-            if let onProgressReady = self.onProgressReady {
-                onProgressReady(request.progress)
-            }
-            processRequest(request: request, managerId, completion)
+            let request = makeRequest(method: method, headers: headers)
+            processRequest(request: request, completion)
         }
-
     }
 
-    fileprivate func processRequest(request: DataRequest, _ managerId: String, _ completion: @escaping (_ response: Response<T>?, _ error: Error?) -> Void) {
-        if let credential = self.credential {
-            request.authenticate(usingCredential: credential)
+    fileprivate func processRequest(request: URLRequest, _ completion: @escaping (_ response: Response<T>?, _ error: Error?) -> Void) {
+        var r = request
+        r.httpMethod = method
+        r.httpBody = request.httpBody
+        for (key, value) in headers {
+            r.setValue(value, forHTTPHeaderField: key)
         }
-
-        let cleanupRequest = {
-            syncQueue.async(flags: .barrier) {
-                 _ = managerStore.removeValue(forKey: managerId)
+        if AsposeSlidesCloudAPI.debug {
+            print(">>\(r.httpMethod!) \(r)")
+            print(r.allHTTPHeaderFields!)
+            if r.httpBody != nil {
+                print(String(data: r.httpBody!, encoding: .utf8)!)
             }
         }
-
-        let validatedRequest = request.validate()
-
-        if AsposeSlidesCloudAPI.debug {
-            debugPrint(validatedRequest)
+        /*request.httpMethod = "POST"
+        let postString = "grant_type=client_credentials&client_id=\(AsposeSlidesCloudAPI.appSid)&client_secret=\(AsposeSlidesCloudAPI.appKey)";
+        request.httpBody = postString.data(using: String.Encoding.utf8);
+        */
+        let task = URLSession.shared.dataTask(with: r) { data, response, error in
+            /*if error == nil && (200 ... 299) ~= (response as? HTTPURLResponse)!.statusCode && data != nil {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
+                    if json != nil {
+                        AsposeSlidesCloudAPI.authToken = json!["access_token"] as? String
+                    }
+                } catch {
+                }
+            }*/
+            if AsposeSlidesCloudAPI.debug {
+                print("<< \(response!)")
+                if (data != nil) {
+                    print(String(data: data!, encoding: .utf8)!)
+                }
+            }
+            let dataResponse = response as! HTTPURLResponse
+            if !((200 ... 299) ~= dataResponse.statusCode) {
+                completion(nil, ErrorResponse.error(dataResponse.statusCode, data, AlamofireDecodableRequestBuilderError.httpError))
+            } else {
+                switch T.self {
+                case is Data.Type:
+                    completion(Response(response: dataResponse, body: data as? T), error)
+		case is Void.Type:
+                    completion(Response(response: dataResponse, body: nil), nil)
+                default:
+                    if data == nil {
+                        completion(nil, ErrorResponse.error(-1, nil, AlamofireDecodableRequestBuilderError.emptyDataResponse))
+                    } else {
+                        completion(Response(response: dataResponse, body: data as? T), nil)
+                   }
+                }
+            }
         }
-        switch T.self {
+        task.resume()
+        /*switch T.self {
         case is String.Type:
-            validatedRequest.responseString(completionHandler: { (stringResponse) in
+            request.responseString(completionHandler: { (stringResponse) in
                 if AsposeSlidesCloudAPI.debug {
                     debugPrint(stringResponse)
                 }
@@ -186,7 +197,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 )
             })
         case is URL.Type:
-            validatedRequest.responseData(completionHandler: { (dataResponse) in
+            request.responseData(completionHandler: { (dataResponse) in
                 if AsposeSlidesCloudAPI.debug {
                     debugPrint(dataResponse)
                 }
@@ -239,7 +250,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 return
             })
         case is Void.Type:
-            validatedRequest.responseData(completionHandler: { (voidResponse) in
+            request.responseData(completionHandler: { (voidResponse) in
                 if AsposeSlidesCloudAPI.debug {
                     debugPrint(voidResponse)
                 }
@@ -261,7 +272,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 )
             })
         default:
-            validatedRequest.responseData(completionHandler: { (dataResponse) in
+            request.responseData(completionHandler: { (dataResponse) in
                 if AsposeSlidesCloudAPI.debug {
                     debugPrint(dataResponse)
                 }
@@ -283,11 +294,11 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                     nil
                 )
             })
-        }
+        }*/
     }
 
     open func buildHeaders() -> [String: String] {
-        var httpHeaders = SessionManager.defaultHTTPHeaders
+        var httpHeaders : [String: String] = [:]
         for (key, value) in self.headers {
             httpHeaders[key] = value
         }
@@ -358,29 +369,71 @@ fileprivate enum DownloadException : Error {
 public enum AlamofireDecodableRequestBuilderError: Error {
     case emptyDataResponse
     case nilHTTPResponse
+    case httpError
     case jsonDecoding(DecodingError)
     case generalError(Error)
 }
 
 open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilder<T> {
 
-    override fileprivate func processRequest(request: DataRequest, _ managerId: String, _ completion: @escaping (_ response: Response<T>?, _ error: Error?) -> Void) {
-        if let credential = self.credential {
-            request.authenticate(usingCredential: credential)
+    override fileprivate func processRequest(request: URLRequest, _ completion: @escaping (_ response: Response<T>?, _ error: Error?) -> Void) {
+        var r = request
+        r.httpMethod = method
+        r.httpBody = request.httpBody
+        for (key, value) in headers {
+            r.setValue(value, forHTTPHeaderField: key)
         }
-
-        let cleanupRequest = {
-            syncQueue.async(flags: .barrier) {
-                _ = managerStore.removeValue(forKey: managerId)
+        if AsposeSlidesCloudAPI.debug {
+            print(">>\(r.httpMethod!) \(r)")
+            print(r.allHTTPHeaderFields!)
+            if r.httpBody != nil {
+                print(String(data: r.httpBody!, encoding: .utf8)!)
             }
         }
+        /*request.httpMethod = "POST"
+        let postString = "grant_type=client_credentials&client_id=\(AsposeSlidesCloudAPI.appSid)&client_secret=\(AsposeSlidesCloudAPI.appKey)";
+        request.httpBody = postString.data(using: String.Encoding.utf8);
+        */
+        let task = URLSession.shared.dataTask(with: r) { data, response, error in
+            /*if error == nil && (200 ... 299) ~= (response as? HTTPURLResponse)!.statusCode && data != nil {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: []) as? [String : Any]
+                    if json != nil {
+                        AsposeSlidesCloudAPI.authToken = json!["access_token"] as? String
+                    }
+                } catch {
+                }
+            }*/
+            if AsposeSlidesCloudAPI.debug {
+                print("<< \(response!)")
+                if (data != nil) {
+                    print(String(data: data!, encoding: .utf8)!)
+                }
+            }
+            let dataResponse = response as! HTTPURLResponse
+            if !((200 ... 299) ~= dataResponse.statusCode) {
+                completion(nil, ErrorResponse.error(dataResponse.statusCode, data, AlamofireDecodableRequestBuilderError.httpError))
+            } else {
+                switch T.self {
+                case is Data.Type:
+                    completion(Response(response: dataResponse, body: data as? T), error)
+                default:
+                    if data == nil {
+                        completion(nil, ErrorResponse.error(-1, nil, AlamofireDecodableRequestBuilderError.emptyDataResponse))
+                    } else {
+                        var responseObj: Response<T>? = nil
 
-        let validatedRequest = request.validate()
-
-        if AsposeSlidesCloudAPI.debug {
-            debugPrint(validatedRequest)
+                        let decodeResult: (decodableObj: T?, error: Error?) = CodableHelper.decode(T.self, from: data!)
+                        if decodeResult.error == nil {
+                            responseObj = Response(response: dataResponse, body: decodeResult.decodableObj)
+                        }
+                        completion(responseObj, decodeResult.error)
+                    }
+                }
+            }
         }
-        switch T.self {
+        task.resume()
+        /*switch T.self {
         case is String.Type:
             validatedRequest.responseString(completionHandler: { (stringResponse) in
                 if AsposeSlidesCloudAPI.debug {
@@ -480,7 +533,6 @@ open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilde
 
                 completion(responseObj, decodeResult.error)
             })
-        }
+        }*/
     }
-
 }

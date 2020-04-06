@@ -33,32 +33,13 @@ import Foundation
 
 public struct ArrowHeadProperties: Codable {
 
-    public enum Length: String, Codable, CaseIterable { 
+    public enum Length: String, Codable { 
         case short = "Short"
         case medium = "Medium"
         case long = "Long"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Length.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Length.allCases.count {
-                self = Length.allCases[intValue]
-                return
-            }
-            self = Length.allCases[0]
-        }
     }
-    public enum Style: String, Codable, CaseIterable { 
+    public enum Style: String, Codable { 
         case _none = "None"
         case triangle = "Triangle"
         case stealth = "Stealth"
@@ -66,50 +47,12 @@ public struct ArrowHeadProperties: Codable {
         case oval = "Oval"
         case open = "Open"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Style.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Style.allCases.count {
-                self = Style.allCases[intValue]
-                return
-            }
-            self = Style.allCases[0]
-        }
     }
-    public enum Width: String, Codable, CaseIterable { 
+    public enum Width: String, Codable { 
         case narrow = "Narrow"
         case medium = "Medium"
         case wide = "Wide"
         case notDefined = "NotDefined"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Width.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Width.allCases.count {
-                self = Width.allCases[intValue]
-                return
-            }
-            self = Width.allCases[0]
-        }
     }
     /** Length. */
     public var length: Length?

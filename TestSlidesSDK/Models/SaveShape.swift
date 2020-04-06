@@ -33,32 +33,13 @@ import Foundation
 
 public struct SaveShape: Codable {
 
-    public enum Format: String, Codable, CaseIterable { 
+    public enum Format: String, Codable { 
         case jpeg = "Jpeg"
         case png = "Png"
         case gif = "Gif"
         case bmp = "Bmp"
         case tiff = "Tiff"
         case svg = "Svg"
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            do {
-                let stringValue = try container.decode(String.self)
-                let enumValue = Format.allCases.first{ "\($0.rawValue)" == stringValue }
-                if enumValue != nil {
-                    self = enumValue!
-                    return
-                }
-            } catch {
-            }
-            let intValue = try container.decode(Int.self)
-            if intValue >= 0 && intValue < Format.allCases.count {
-                self = Format.allCases[intValue]
-                return
-            }
-            self = Format.allCases[0]
-        }
     }
     /** Format. */
     public var format: Format?
